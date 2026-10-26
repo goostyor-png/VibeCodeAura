@@ -1053,18 +1053,18 @@ local function resetAll()
 end
 local function dbfmt(v) return string.format("%+.0f dB", v) end
 
-local pg = page("Музыка")
-section(pg, "ПЛЕЕР")
-local idc = card(pg, 42)
+__AuraFix_pg = page("Музыка")
+section(__AuraFix_pg, "ПЛЕЕР")
+__AuraFix_idc = card(__AuraFix_pg, 42)
 box = new("TextBox", {Text = "", ClearTextOnFocus = false, Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = C.text,
 	PlaceholderColor3 = C.sub, BackgroundColor3 = C.card2, TextXAlignment = Enum.TextXAlignment.Left, ClipsDescendants = true,
-	Position = UDim2.fromOffset(6, 6), Size = UDim2.new(1, -94, 1, -12)}, idc)
+	Position = UDim2.fromOffset(6, 6), Size = UDim2.new(1, -94, 1, -12)}, __AuraFix_idc)
 bind(box, "Вставьте ID песни", "PlaceholderText")
 round(box, 6); new("UIPadding", {PaddingLeft = UDim.new(0, 8)}, box)
-local bs = stroke(box, 1.5, accent, 1); acc(bs, "Color")
-cn(box.Focused, function() tw(bs, {Transparency = 0}, .2) end)
+__AuraFix_bs = stroke(box, 1.5, accent, 1); acc(__AuraFix_bs, "Color")
+cn(box.Focused, function() tw(__AuraFix_bs, {Transparency = 0}, .2) end)
 cn(box.FocusLost, function(enter)
-	tw(bs, {Transparency = 1}, .25)
+	tw(__AuraFix_bs, {Transparency = 1}, .25)
 	box.Text = box.Text:match("%d+") or ""
 	if enter then play(box.Text) end
 end)
@@ -1072,35 +1072,35 @@ cn(box:GetPropertyChangedSignal("Text"), function()
 	local s = box.Text:match("%d+") or ""
 	if s ~= box.Text then box.Text = s end
 end)
-local go = button(idc, "Играть", function() play(box.Text) end, true, UDim2.new(0, 76, 1, -12))
-go.Position = UDim2.new(1, -82, 0, 6)
+__AuraFix_go = button(__AuraFix_idc, "Играть", function() play(box.Text) end, true, UDim2.new(0, 76, 1, -12))
+__AuraFix_go.Position = UDim2.new(1, -82, 0, 6)
 
-local np = card(pg, 60)
-local vinyl = new("Frame", {AnchorPoint = Vector2.new(0, .5), Position = UDim2.new(0, 10, .5, 0), Size = UDim2.fromOffset(44, 44),
-	BackgroundColor3 = WHITE}, np)
-round(vinyl, 22)
-local vs = stroke(vinyl, 2, accent, .4); acc(vs, "Color")
-local hi, lo2 = Color3.fromRGB(95, 95, 118), Color3.fromRGB(22, 22, 30)
-new("UIGradient", {Rotation = 35, Color = ColorSequence.new({ColorSequenceKeypoint.new(0, hi), ColorSequenceKeypoint.new(.25, lo2),
-	ColorSequenceKeypoint.new(.5, hi), ColorSequenceKeypoint.new(.75, lo2), ColorSequenceKeypoint.new(1, hi)})}, vinyl)
+__AuraFix_np = card(__AuraFix_pg, 60)
+__AuraFix_vinyl = new("Frame", {AnchorPoint = Vector2.new(0, .5), Position = UDim2.new(0, 10, .5, 0), Size = UDim2.fromOffset(44, 44),
+	BackgroundColor3 = WHITE}, __AuraFix_np)
+round(__AuraFix_vinyl, 22)
+__AuraFix_vs = stroke(__AuraFix_vinyl, 2, accent, .4); acc(__AuraFix_vs, "Color")
+__AuraFix_hi, __AuraFix_lo2 = Color3.fromRGB(95, 95, 118), Color3.fromRGB(22, 22, 30)
+new("UIGradient", {Rotation = 35, Color = ColorSequence.new({ColorSequenceKeypoint.new(0, __AuraFix_hi), ColorSequenceKeypoint.new(.25, __AuraFix_lo2),
+	ColorSequenceKeypoint.new(.5, __AuraFix_hi), ColorSequenceKeypoint.new(.75, __AuraFix_lo2), ColorSequenceKeypoint.new(1, __AuraFix_hi)})}, __AuraFix_vinyl)
 for _, d in ipairs({36, 28}) do
-	local g = new("Frame", {AnchorPoint = Vector2.new(.5, .5), Position = UDim2.fromScale(.5, .5), Size = UDim2.fromOffset(d, d), BackgroundTransparency = 1}, vinyl)
+	local g = new("Frame", {AnchorPoint = Vector2.new(.5, .5), Position = UDim2.fromScale(.5, .5), Size = UDim2.fromOffset(d, d), BackgroundTransparency = 1}, __AuraFix_vinyl)
 	round(g, d / 2); stroke(g, 1, WHITE, .88)
 end
-local vlab = new("Frame", {AnchorPoint = Vector2.new(.5, .5), Position = UDim2.fromScale(.5, .5), Size = UDim2.fromOffset(16, 16)}, vinyl)
-round(vlab, 8); acc(vlab, "BackgroundColor3")
-local vhole = new("Frame", {AnchorPoint = Vector2.new(.5, .5), Position = UDim2.fromScale(.5, .5), Size = UDim2.fromOffset(4, 4), BackgroundColor3 = C.card}, vlab)
-round(vhole, 2)
-nameL = lbl(np, "", 13, nil, {Position = UDim2.fromOffset(64, 10), Size = UDim2.new(1, -74, 0, 18), Font = Enum.Font.GothamBold})
-statusL = lbl(np, "", 11, C.sub, {Position = UDim2.fromOffset(64, 30), Size = UDim2.new(1, -74, 0, 16)})
+__AuraFix_vlab = new("Frame", {AnchorPoint = Vector2.new(.5, .5), Position = UDim2.fromScale(.5, .5), Size = UDim2.fromOffset(16, 16)}, __AuraFix_vinyl)
+round(__AuraFix_vlab, 8); acc(__AuraFix_vlab, "BackgroundColor3")
+__AuraFix_vhole = new("Frame", {AnchorPoint = Vector2.new(.5, .5), Position = UDim2.fromScale(.5, .5), Size = UDim2.fromOffset(4, 4), BackgroundColor3 = C.card}, __AuraFix_vlab)
+round(__AuraFix_vhole, 2)
+nameL = lbl(__AuraFix_np, "", 13, nil, {Position = UDim2.fromOffset(64, 10), Size = UDim2.new(1, -74, 0, 18), Font = Enum.Font.GothamBold})
+statusL = lbl(__AuraFix_np, "", 11, C.sub, {Position = UDim2.fromOffset(64, 30), Size = UDim2.new(1, -74, 0, 16)})
 trReg[#trReg + 1] = idle
 idle()
 
-histBox = new("Frame", {Size = UDim2.new(1, 0, 0, 26), BackgroundTransparency = 1, Visible = false}, pg)
+histBox = new("Frame", {Size = UDim2.new(1, 0, 0, 26), BackgroundTransparency = 1, Visible = false}, __AuraFix_pg)
 new("UIListLayout", {FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 5)}, histBox)
 
-section(pg, "ПОИСК ПО НАЗВАНИЮ")
-local searchCard = card(pg, 42)
+section(__AuraFix_pg, "ПОИСК ПО НАЗВАНИЮ")
+__AuraFix_searchCard = card(__AuraFix_pg, 42)
 searchBox = new("TextBox", {
 	Text = "",
 	ClearTextOnFocus = false,
@@ -1114,37 +1114,37 @@ searchBox = new("TextBox", {
 	ClipsDescendants = true,
 	Position = UDim2.fromOffset(6, 6),
 	Size = UDim2.new(1, -94, 1, -12),
-}, searchCard)
+}, __AuraFix_searchCard)
 round(searchBox, 7)
 new("UIPadding", {PaddingLeft = UDim.new(0, 9), PaddingRight = UDim.new(0, 5)}, searchBox)
-local searchStroke = stroke(searchBox, 1.5, accent, 1)
-acc(searchStroke, "Color")
-cn(searchBox.Focused, function() tw(searchStroke, {Transparency = .1}, .2) end)
+__AuraFix_searchStroke = stroke(searchBox, 1.5, accent, 1)
+acc(__AuraFix_searchStroke, "Color")
+cn(searchBox.Focused, function() tw(__AuraFix_searchStroke, {Transparency = .1}, .2) end)
 cn(searchBox.FocusLost, function(enter)
-	tw(searchStroke, {Transparency = 1}, .25)
+	tw(__AuraFix_searchStroke, {Transparency = 1}, .25)
 	if enter then
-		local btn = searchCard:FindFirstChild("SearchButton")
+		local btn = __AuraFix_searchCard:FindFirstChild("SearchButton")
 		if btn then btn:Activate() end
 	end
 end)
-local searchButton = button(searchCard, "Найти", nil, true, UDim2.new(0, 76, 1, -12))
-searchButton.Name = "SearchButton"
-searchButton.Position = UDim2.new(1, -82, 0, 6)
+__AuraFix_searchButton = button(__AuraFix_searchCard, "Найти", nil, true, UDim2.new(0, 76, 1, -12))
+__AuraFix_searchButton.Name = "SearchButton"
+__AuraFix_searchButton.Position = UDim2.new(1, -82, 0, 6)
 
-local searchInfoCard = new("Frame", {Size = UDim2.new(1, 0, 0, 28), BackgroundColor3 = C.card3, BackgroundTransparency = .1}, pg)
-round(searchInfoCard, 7)
-local searchInfoDot = new("Frame", {Position = UDim2.fromOffset(10, 10), Size = UDim2.fromOffset(8, 8), BackgroundColor3 = accent}, searchInfoCard)
-round(searchInfoDot, 4)
-local searchStatusL = lbl(searchInfoCard, "Поиск выполняется через AssetService", 11, C.sub, {Position = UDim2.fromOffset(25, 0), Size = UDim2.new(1, -32, 1, 0)})
-searchStatus = searchStatusL
+__AuraFix_searchInfoCard = new("Frame", {Size = UDim2.new(1, 0, 0, 28), BackgroundColor3 = C.card3, BackgroundTransparency = .1}, __AuraFix_pg)
+round(__AuraFix_searchInfoCard, 7)
+__AuraFix_searchInfoDot = new("Frame", {Position = UDim2.fromOffset(10, 10), Size = UDim2.fromOffset(8, 8), BackgroundColor3 = accent}, __AuraFix_searchInfoCard)
+round(__AuraFix_searchInfoDot, 4)
+__AuraFix_searchStatusL = lbl(__AuraFix_searchInfoCard, "Поиск выполняется через AssetService", 11, C.sub, {Position = UDim2.fromOffset(25, 0), Size = UDim2.new(1, -32, 1, 0)})
+searchStatus = __AuraFix_searchStatusL
 
-searchResults = new("Frame", {Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1}, pg)
+searchResults = new("Frame", {Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1}, __AuraFix_pg)
 new("UIListLayout", {Padding = UDim.new(0, 5), SortOrder = Enum.SortOrder.LayoutOrder}, searchResults)
 
-local queueHeading = section(pg, "ОЧЕРЕДЬ")
-local queueInfo = card(pg, 30)
-queueStatus = lbl(queueInfo, "Очередь пуста", 11, C.sub, {Position = UDim2.fromOffset(10, 0), Size = UDim2.new(1, -96, 1, 0)})
-local clearQueueButton = button(queueInfo, "Очистить очередь", function()
+__AuraFix_queueHeading = section(__AuraFix_pg, "ОЧЕРЕДЬ")
+__AuraFix_queueInfo = card(__AuraFix_pg, 30)
+queueStatus = lbl(__AuraFix_queueInfo, "Очередь пуста", 11, C.sub, {Position = UDim2.fromOffset(10, 0), Size = UDim2.new(1, -96, 1, 0)})
+__AuraFix_clearQueueButton = button(__AuraFix_queueInfo, "Очистить очередь", function()
 	table.clear(queueItems)
 	if queueList then
 		for _, child in ipairs(queueList:GetChildren()) do
@@ -1154,19 +1154,19 @@ local clearQueueButton = button(queueInfo, "Очистить очередь", fu
 	queueStatus.Text = T("Очередь пуста")
 	toast("Список очищен")
 end, false, UDim2.new(0, 90, 1, -8))
-clearQueueButton.Position = UDim2.new(1, -94, 0, 4)
-queueList = new("Frame", {Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1}, pg)
+__AuraFix_clearQueueButton.Position = UDim2.new(1, -94, 0, 4)
+queueList = new("Frame", {Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1}, __AuraFix_pg)
 new("UIListLayout", {Padding = UDim.new(0, 4), SortOrder = Enum.SortOrder.LayoutOrder}, queueList)
 
-local function clearGenerated(parent)
+function __AuraFix_clearGenerated(parent)
 	for _, child in ipairs(parent:GetChildren()) do
 		if not child:IsA("UIListLayout") and not child:IsA("UIPadding") then child:Destroy() end
 	end
 end
 
-local function renderQueue()
+function __AuraFix_renderQueue()
 	if not queueList then return end
-	clearGenerated(queueList)
+	__AuraFix_clearGenerated(queueList)
 	local count = #queueItems
 	queueStatus.Text = count > 0 and (T("В очереди") .. ": " .. tostring(count)) or T("Очередь пуста")
 	if count == 0 then
@@ -1186,7 +1186,7 @@ local function renderQueue()
 		press(playNow, true)
 		cn(playNow.Activated, function()
 			table.remove(queueItems, index)
-			renderQueue()
+			__AuraFix_renderQueue()
 			box.Text = item.id
 			play(item.id)
 		end)
@@ -1195,14 +1195,14 @@ local function renderQueue()
 		press(remove, true)
 		cn(remove.Activated, function()
 			table.remove(queueItems, index)
-			renderQueue()
+			__AuraFix_renderQueue()
 		end)
 		cn(rowFrame.MouseEnter, function() tw(rowFrame, {BackgroundColor3 = C.card2}, .15) end)
 		cn(rowFrame.MouseLeave, function() tw(rowFrame, {BackgroundColor3 = C.card}, .2) end)
 	end
 end
 
-local function addToQueue(id, title, artist)
+function __AuraFix_addToQueue(id, title, artist)
 	id = tostring(id or "")
 	if not id:match("^%d+$") then return end
 	for _, item in ipairs(queueItems) do
@@ -1212,16 +1212,16 @@ local function addToQueue(id, title, artist)
 		end
 	end
 	table.insert(queueItems, {id = id, title = title or knownTitles[id] or id, artist = artist})
-	renderQueue()
+	__AuraFix_renderQueue()
 	toast("Добавлено в очередь", C.good)
 end
 
-local function clearSearchResults()
-	clearGenerated(searchResults)
+function __AuraFix_clearSearchResults()
+	__AuraFix_clearGenerated(searchResults)
 	searchResultCount = 0
 end
 
-local function addSearchResult(audio)
+function __AuraFix_addSearchResult(audio)
 	local id = tostring(audio.Id or audio.AssetId or audio.id or "")
 	local title = tostring(audio.Title or audio.Name or ("Audio " .. id))
 	local creator = audio.Artist
@@ -1248,7 +1248,7 @@ local function addSearchResult(audio)
 		box.Text = id
 		play(id)
 	end)
-	cn(queueResult.Activated, function() addToQueue(id, title, creator) end)
+	cn(queueResult.Activated, function() __AuraFix_addToQueue(id, title, creator) end)
 	cn(result.MouseEnter, function()
 		tw(result, {BackgroundColor3 = C.card2}, .16)
 		tw(edge, {Transparency = .55}, .16)
@@ -1262,20 +1262,20 @@ local function addSearchResult(audio)
 	searchResultCount += 1
 end
 
-local function searchAudio(query)
+function __AuraFix_searchAudio(query)
 	query = tostring(query or ""):gsub("^%s+", ""):gsub("%s+$", "")
 	if #query < 2 then
 		searchStatus.Text = T("Введите хотя бы 2 символа")
-		searchInfoDot.BackgroundColor3 = C.warn
+		__AuraFix_searchInfoDot.BackgroundColor3 = C.warn
 		return
 	end
 	searchToken += 1
 	local requestId = searchToken
 	currentSearchTerm = query
-	clearSearchResults()
+	__AuraFix_clearSearchResults()
 	searchStatus.Text = T("Поиск...")
-	searchInfoDot.BackgroundColor3 = accent
-	tw(searchInfoDot, {BackgroundTransparency = .45}, .18)
+	__AuraFix_searchInfoDot.BackgroundColor3 = accent
+	tw(__AuraFix_searchInfoDot, {BackgroundTransparency = .45}, .18)
 	task.spawn(function()
 		local ok, pages = pcall(function()
 			local service = game:GetService("AssetService")
@@ -1289,7 +1289,7 @@ local function searchAudio(query)
 		if requestId ~= searchToken then return end
 		if not ok or not pages then
 			searchStatus.Text = T("Поиск недоступен в этой среде")
-			searchInfoDot.BackgroundColor3 = C.bad
+			__AuraFix_searchInfoDot.BackgroundColor3 = C.bad
 			local errorCard = new("Frame", {Size = UDim2.new(1, 0, 0, 36), BackgroundColor3 = C.card, BackgroundTransparency = .05}, searchResults)
 			round(errorCard, 8)
 			lbl(errorCard, T("Поиск недоступен в этой среде"), 11, C.sub, {Position = UDim2.fromOffset(10, 0), Size = UDim2.new(1, -20, 1, 0)})
@@ -1299,7 +1299,7 @@ local function searchAudio(query)
 		if requestId ~= searchToken then return end
 		if not pageOK or type(pageData) ~= "table" then
 			searchStatus.Text = T("Поиск недоступен в этой среде")
-			searchInfoDot.BackgroundColor3 = C.bad
+			__AuraFix_searchInfoDot.BackgroundColor3 = C.bad
 			return
 		end
 		local added = 0
@@ -1307,132 +1307,132 @@ local function searchAudio(query)
 			if added >= 15 then break end
 			if type(audio) == "table" then
 				local before = searchResultCount
-				addSearchResult(audio)
+				__AuraFix_addSearchResult(audio)
 				if searchResultCount > before then added += 1 end
 			end
 		end
 		if added == 0 then
 			searchStatus.Text = T("Ничего не найдено")
-			searchInfoDot.BackgroundColor3 = C.warn
+			__AuraFix_searchInfoDot.BackgroundColor3 = C.warn
 			local noResult = new("Frame", {Size = UDim2.new(1, 0, 0, 34), BackgroundColor3 = C.card, BackgroundTransparency = .05}, searchResults)
 			round(noResult, 8)
 			lbl(noResult, T("Ничего не найдено"), 11, C.sub, {Position = UDim2.fromOffset(10, 0), Size = UDim2.new(1, -20, 1, 0)})
 		else
 			searchStatus.Text = T("Список результатов") .. ": " .. tostring(added) .. " · " .. query
-			searchInfoDot.BackgroundColor3 = C.good
+			__AuraFix_searchInfoDot.BackgroundColor3 = C.good
 		end
 	end)
 end
 
-cn(searchButton.Activated, function() searchAudio(searchBox.Text) end)
+cn(__AuraFix_searchButton.Activated, function() __AuraFix_searchAudio(searchBox.Text) end)
 cn(searchBox:GetPropertyChangedSignal("Text"), function()
 	if #searchBox.Text > 90 then searchBox.Text = searchBox.Text:sub(1, 90) end
 end)
-renderQueue()
+__AuraFix_renderQueue()
 
-local vc = card(pg, 56)
-local bars = {}
+__AuraFix_vc = card(__AuraFix_pg, 56)
+__AuraFix_bars = {}
 for n = 1, 28 do
-	local b = new("Frame", {BackgroundColor3 = WHITE, AnchorPoint = Vector2.new(0, 1), Position = UDim2.new((n - 1) / 28, 2, 1, -6), Size = UDim2.new(1 / 28, -3, 0, 3)}, vc)
+	local b = new("Frame", {BackgroundColor3 = WHITE, AnchorPoint = Vector2.new(0, 1), Position = UDim2.new((n - 1) / 28, 2, 1, -6), Size = UDim2.new(1 / 28, -3, 0, 3)}, __AuraFix_vc)
 	round(b, 2)
 	grad(b, function() return ColorSequence.new(light(accent):Lerp(accent, .4), accent) end, {Rotation = 90})
-	local cap = new("Frame", {AnchorPoint = Vector2.new(0, 1), Position = UDim2.new((n - 1) / 28, 2, 1, -11), Size = UDim2.new(1 / 28, -3, 0, 2)}, vc)
+	local cap = new("Frame", {AnchorPoint = Vector2.new(0, 1), Position = UDim2.new((n - 1) / 28, 2, 1, -11), Size = UDim2.new(1 / 28, -3, 0, 2)}, __AuraFix_vc)
 	round(cap, 1); acc(cap, "BackgroundColor3")
-	bars[n] = {f = b, c = cap, h = 0, p = 0}
+	__AuraFix_bars[n] = {f = b, c = cap, h = 0, p = 0}
 end
-prog = slider(pg, "Трек", 0, 1, 0, function(v)
+prog = slider(__AuraFix_pg, "Трек", 0, 1, 0, function(v)
 	local l = sound.TimeLength
 	return fmtT(v * l) .. " / " .. fmtT(l)
 end, function(v)
 	if sound.TimeLength > 0 then sound.TimePosition = v * sound.TimeLength end
 end, nil, nil, true)
-local r = row(pg, 32)
-local q = UDim2.new(.25, -5, 1, 0)
-button(r, "-10с", function() sound.TimePosition = math.max(0, sound.TimePosition - 10) end, false, q)
-pauseB = button(r, "Пауза", function()
+__AuraFix_r = row(__AuraFix_pg, 32)
+__AuraFix_q = UDim2.new(.25, -5, 1, 0)
+button(__AuraFix_r, "-10с", function() sound.TimePosition = math.max(0, sound.TimePosition - 10) end, false, __AuraFix_q)
+pauseB = button(__AuraFix_r, "Пауза", function()
 	if sound.IsPlaying then sound:Pause()
 	elseif sound.IsPaused then sound:Resume()
 	elseif sound.SoundId ~= "" then endedF = false; sound:Play() end
-end, true, q)
-button(r, "Стоп", function()
+end, true, __AuraFix_q)
+button(__AuraFix_r, "Стоп", function()
 	playTok += 1
 	sound:Stop()
 	if not trackOK and touched then setStatus(T("Остановлено")) end
-end, false, q)
-button(r, "+10с", function() sound.TimePosition = math.min(sound.TimeLength, sound.TimePosition + 10) end, false, q)
-toggle(pg, "Повтор трека", false, function(v) sound.Looped = v end, "loop")
+end, false, __AuraFix_q)
+button(__AuraFix_r, "+10с", function() sound.TimePosition = math.min(sound.TimeLength, sound.TimePosition + 10) end, false, __AuraFix_q)
+toggle(__AuraFix_pg, "Повтор трека", false, function(v) sound.Looped = v end, "loop")
 
-section(pg, "СКОРОСТЬ И ТОНАЛЬНОСТЬ")
-spd = slider(pg, "Скорость", .25, 3, 1, function(v) return string.format("%.2fx", v) end, function(v) S.speed = v; applyAudio() end, .05, "speed")
-tapeT = toggle(pg, "Менять тон со скоростью", true, function(v) S.tape = v; applyAudio() end, "tape")
-semi = slider(pg, "Тональность", -12, 12, 0, function(v) return string.format("%+.0f %s", v, T("пт")) end, function(v) S.semi = v; applyAudio() end, 1, "semi")
-section(pg, "ГРОМКОСТЬ")
-vol = slider(pg, "Усиление", -40, 20, 0, dbfmt, function(v) S.db = v; applyAudio() end, 1, "db")
-local volumeQuick = row(pg, 30)
-button(volumeQuick, "Тихо", function() vol.Set(-12); toast("Тихо") end, false, q)
-button(volumeQuick, "Обычный", function() vol.Set(0); toast("Обычный") end, false, q)
-button(volumeQuick, "Громко", function() vol.Set(8); toast("Громко") end, false, q)
-button(volumeQuick, "Максимум", function() vol.Set(16); toast("Максимум", C.warn) end, false, q)
-section(pg, "БЫСТРЫЕ НАСТРОЙКИ")
-local musicOptions = row(pg, 30)
-button(musicOptions, "Play / Pause", function()
+section(__AuraFix_pg, "СКОРОСТЬ И ТОНАЛЬНОСТЬ")
+spd = slider(__AuraFix_pg, "Скорость", .25, 3, 1, function(v) return string.format("%.2fx", v) end, function(v) S.speed = v; applyAudio() end, .05, "speed")
+tapeT = toggle(__AuraFix_pg, "Менять тон со скоростью", true, function(v) S.tape = v; applyAudio() end, "tape")
+semi = slider(__AuraFix_pg, "Тональность", -12, 12, 0, function(v) return string.format("%+.0f %s", v, T("пт")) end, function(v) S.semi = v; applyAudio() end, 1, "semi")
+section(__AuraFix_pg, "ГРОМКОСТЬ")
+vol = slider(__AuraFix_pg, "Усиление", -40, 20, 0, dbfmt, function(v) S.db = v; applyAudio() end, 1, "db")
+__AuraFix_volumeQuick = row(__AuraFix_pg, 30)
+button(__AuraFix_volumeQuick, "Тихо", function() vol.Set(-12); toast("Тихо") end, false, __AuraFix_q)
+button(__AuraFix_volumeQuick, "Обычный", function() vol.Set(0); toast("Обычный") end, false, __AuraFix_q)
+button(__AuraFix_volumeQuick, "Громко", function() vol.Set(8); toast("Громко") end, false, __AuraFix_q)
+button(__AuraFix_volumeQuick, "Максимум", function() vol.Set(16); toast("Максимум", C.warn) end, false, __AuraFix_q)
+section(__AuraFix_pg, "БЫСТРЫЕ НАСТРОЙКИ")
+__AuraFix_musicOptions = row(__AuraFix_pg, 30)
+button(__AuraFix_musicOptions, "Play / Pause", function()
 	if sound.IsPlaying then sound:Pause() elseif sound.IsPaused then sound:Resume() elseif sound.SoundId ~= "" then sound:Play() end
 end, true, UDim2.new(.5, -3, 1, 0))
-button(musicOptions, "Очистить очередь", function()
+button(__AuraFix_musicOptions, "Очистить очередь", function()
 	table.clear(queueItems)
-	renderQueue()
+	__AuraFix_renderQueue()
 	toast("Список очищен")
 end, false, UDim2.new(.5, -3, 1, 0))
-section(pg, "ВИЗУАЛИЗАТОР")
-segment(pg, "Стиль", {"Мягкий", "Пики", "Спектр"}, function(i) visualizerStyle = i end, 1, "visualizerStyle")
-toggle(pg, "Пульсация акцента", true, function(v) musicAccentPulse = v end, "musicAccentPulse")
-toggle(pg, "Авто-очередь", true, function(v) queueAutoPlay = v end, "queueAutoPlay")
-button(pg, "Сбросить всё", resetAll)
+section(__AuraFix_pg, "ВИЗУАЛИЗАТОР")
+segment(__AuraFix_pg, "Стиль", {"Мягкий", "Пики", "Спектр"}, function(i) visualizerStyle = i end, 1, "visualizerStyle")
+toggle(__AuraFix_pg, "Пульсация акцента", true, function(v) musicAccentPulse = v end, "musicAccentPulse")
+toggle(__AuraFix_pg, "Авто-очередь", true, function(v) queueAutoPlay = v end, "queueAutoPlay")
+button(__AuraFix_pg, "Сбросить всё", resetAll)
 
-local pe = page("Эффекты")
-local function preset(name, fn)
+__AuraFix_pe = page("Эффекты")
+function __AuraFix_preset(name, fn)
 	return function() resetAll(); fn(); toast(T("Пресет: ") .. name) end
 end
-section(pe, "ПРЕСЕТЫ")
-local pr = row(pe, 30)
-button(pr, "Night", preset("Night", function() spd.Set(1.25); tapeT.Set(true) end), false, q)
-button(pr, "Slowed", preset("Slowed", function() spd.Set(.85); tapeT.Set(true); reverbT.Set(true) end), false, q)
-button(pr, "Bass", preset("Bass", function() bassS.Set(10); midS.Set(-3); trebS.Set(2) end), false, q)
-button(pr, "Сброс", function() resetAll(); toast("Всё сброшено") end, false, q)
-section(pe, "ЭКВАЛАЙЗЕР")
-bassS = slider(pe, "Низкие", -20, 10, 0, dbfmt, function(v) eq.LowGain = v end, 1, "bass")
-midS = slider(pe, "Средние", -20, 10, 0, dbfmt, function(v) eq.MidGain = v end, 1, "mid")
-trebS = slider(pe, "Высокие", -20, 10, 0, dbfmt, function(v) eq.HighGain = v end, 1, "treb")
-section(pe, "ПРОСТРАНСТВО")
-reverbT = toggle(pe, "Реверберация", false, function(v) reverb.Enabled = v end, "reverb")
-echoT = toggle(pe, "Эхо", false, function(v) echo.Enabled = v end, "echo")
+section(__AuraFix_pe, "ПРЕСЕТЫ")
+__AuraFix_pr = row(__AuraFix_pe, 30)
+button(__AuraFix_pr, "Night", __AuraFix_preset("Night", function() spd.Set(1.25); tapeT.Set(true) end), false, __AuraFix_q)
+button(__AuraFix_pr, "Slowed", __AuraFix_preset("Slowed", function() spd.Set(.85); tapeT.Set(true); reverbT.Set(true) end), false, __AuraFix_q)
+button(__AuraFix_pr, "Bass", __AuraFix_preset("Bass", function() bassS.Set(10); midS.Set(-3); trebS.Set(2) end), false, __AuraFix_q)
+button(__AuraFix_pr, "Сброс", function() resetAll(); toast("Всё сброшено") end, false, __AuraFix_q)
+section(__AuraFix_pe, "ЭКВАЛАЙЗЕР")
+bassS = slider(__AuraFix_pe, "Низкие", -20, 10, 0, dbfmt, function(v) eq.LowGain = v end, 1, "bass")
+midS = slider(__AuraFix_pe, "Средние", -20, 10, 0, dbfmt, function(v) eq.MidGain = v end, 1, "mid")
+trebS = slider(__AuraFix_pe, "Высокие", -20, 10, 0, dbfmt, function(v) eq.HighGain = v end, 1, "treb")
+section(__AuraFix_pe, "ПРОСТРАНСТВО")
+reverbT = toggle(__AuraFix_pe, "Реверберация", false, function(v) reverb.Enabled = v end, "reverb")
+echoT = toggle(__AuraFix_pe, "Эхо", false, function(v) echo.Enabled = v end, "echo")
 
-local pv = page("Визуал")
-section(pv, "ОТОБРАЖЕНИЕ")
-toggle(pv, "Подсветка игроков", true, function(v) V.hl = v; refresh() end, "hl")
-toggle(pv, "Рамка игрока", true, function(v) V.box = v; refresh() end, "box")
-toggle(pv, "Полоса здоровья", true, function(v) V.health = v; refresh() end, "health")
-toggle(pv, "Трассеры", false, function(v) V.tracers = v; refresh() end, "tracers")
-toggle(pv, "Скелет", false, function(v) V.skel = v; refresh() end, "skel")
-toggle(pv, "Имена", true, function(v) V.names = v; refresh() end, "names")
-toggle(pv, "Дистанция", false, function(v) V.dist = v; refresh() end, "dist")
-toggle(pv, "Здоровье в имени", false, function(v) V.healthText = v; refresh() end, "healthText")
-toggle(pv, "Проверка команды", false, function(v) V.teamCheck = v; refresh() end, "teamCheck")
-slider(pv, "Дальность", 50, 1000, 250, function(v) return string.format("%d %s", v, T("ст.")) end, function(v) V.range = v end, 10, "range")
-segment(pv, "Стиль", {"Контур", "Заливка", "Градиент"}, function(i) V.style = i end, 1, "style")
-section(pv, "ЦВЕТ И ПЛАВНОСТЬ")
-slider(pv, "Яркость ESP", 25, 100, 100, function(v) return string.format("%d%%", v) end, function(v) V.brightness = v / 100 end, 5, "espBrightness")
-slider(pv, "Размер подписей", 10, 18, 13, function(v) return string.format("%d px", v) end, function(v) V.labelSize = v end, 1, "labelSize")
-slider(pv, "Толщина рамки", 1, 4, 1.5, function(v) return string.format("%.1f px", v) end, function(v) V.lineWidth = v end, .5, "lineWidth")
-local espActions = row(pv, 32)
-button(espActions, "Всё включить", function()
+__AuraFix_pv = page("Визуал")
+section(__AuraFix_pv, "ОТОБРАЖЕНИЕ")
+toggle(__AuraFix_pv, "Подсветка игроков", true, function(v) V.hl = v; refresh() end, "hl")
+toggle(__AuraFix_pv, "Рамка игрока", true, function(v) V.box = v; refresh() end, "box")
+toggle(__AuraFix_pv, "Полоса здоровья", true, function(v) V.health = v; refresh() end, "health")
+toggle(__AuraFix_pv, "Трассеры", false, function(v) V.tracers = v; refresh() end, "tracers")
+toggle(__AuraFix_pv, "Скелет", false, function(v) V.skel = v; refresh() end, "skel")
+toggle(__AuraFix_pv, "Имена", true, function(v) V.names = v; refresh() end, "names")
+toggle(__AuraFix_pv, "Дистанция", false, function(v) V.dist = v; refresh() end, "dist")
+toggle(__AuraFix_pv, "Здоровье в имени", false, function(v) V.healthText = v; refresh() end, "healthText")
+toggle(__AuraFix_pv, "Проверка команды", false, function(v) V.teamCheck = v; refresh() end, "teamCheck")
+slider(__AuraFix_pv, "Дальность", 50, 1000, 250, function(v) return string.format("%d %s", v, T("ст.")) end, function(v) V.range = v end, 10, "range")
+segment(__AuraFix_pv, "Стиль", {"Контур", "Заливка", "Градиент"}, function(i) V.style = i end, 1, "style")
+section(__AuraFix_pv, "ЦВЕТ И ПЛАВНОСТЬ")
+slider(__AuraFix_pv, "Яркость ESP", 25, 100, 100, function(v) return string.format("%d%%", v) end, function(v) V.brightness = v / 100 end, 5, "espBrightness")
+slider(__AuraFix_pv, "Размер подписей", 10, 18, 13, function(v) return string.format("%d px", v) end, function(v) V.labelSize = v end, 1, "labelSize")
+slider(__AuraFix_pv, "Толщина рамки", 1, 4, 1.5, function(v) return string.format("%.1f px", v) end, function(v) V.lineWidth = v end, .5, "lineWidth")
+__AuraFix_espActions = row(__AuraFix_pv, 32)
+button(__AuraFix_espActions, "Всё включить", function()
 	for _, key in ipairs({"hl", "box", "health", "names", "dist"}) do
 		if ctl[key] then ctl[key].Set(true) end
 	end
 	refresh()
 	toast("Включено", C.good)
 end, true, UDim2.new(.5, -3, 1, 0))
-button(espActions, "Всё скрыть", function()
+button(__AuraFix_espActions, "Всё скрыть", function()
 	for _, key in ipairs({"hl", "box", "health", "tracers", "skel", "names", "dist", "healthText"}) do
 		if ctl[key] then ctl[key].Set(false) end
 	end
@@ -1440,20 +1440,20 @@ button(espActions, "Всё скрыть", function()
 	toast("Выключено", C.warn)
 end, false, UDim2.new(.5, -3, 1, 0))
 
-local pm = page("Разное")
-section(pm, "ОБЩЕЕ")
-toggle(pm, "Анти-АФК", true, function(v) afkOn = v end, "afk")
-toggle(pm, "Показывать FPS", false, function(v) V.fps = v; showFps(v) end, "fps")
-toggle(pm, "Авто-перезаход", false, function(v) rejoinOn = v end, "rejoin")
-slider(pm, "Поле зрения", 50, 120, 70, function(v) return string.format("%.0f°", v) end, function(v) fovT = v; fovOn = true end, 1, "fov")
-segment(pm, "Язык", {"Русский", "English"}, setLang, 1, "lang")
-local cr = row(pm, 32)
-local half = UDim2.new(.5, -3, 1, 0)
-button(cr, "Сохранить конфиг", function()
+__AuraFix_pm = page("Разное")
+section(__AuraFix_pm, "ОБЩЕЕ")
+toggle(__AuraFix_pm, "Анти-АФК", true, function(v) afkOn = v end, "afk")
+toggle(__AuraFix_pm, "Показывать FPS", false, function(v) V.fps = v; showFps(v) end, "fps")
+toggle(__AuraFix_pm, "Авто-перезаход", false, function(v) rejoinOn = v end, "rejoin")
+slider(__AuraFix_pm, "Поле зрения", 50, 120, 70, function(v) return string.format("%.0f°", v) end, function(v) fovT = v; fovOn = true end, 1, "fov")
+segment(__AuraFix_pm, "Язык", {"Русский", "English"}, setLang, 1, "lang")
+__AuraFix_cr = row(__AuraFix_pm, 32)
+__AuraFix_half = UDim2.new(.5, -3, 1, 0)
+button(__AuraFix_cr, "Сохранить конфиг", function()
 	local ok = saveCfg()
 	toast(ok and "Конфиг сохранён" or "Сохранение недоступно", ok and C.good or C.bad)
-end, true, half)
-button(cr, "Загрузить конфиг", function()
+end, true, __AuraFix_half)
+button(__AuraFix_cr, "Загрузить конфиг", function()
 	if loadCfg() then
 		for k, o in pairs(ctl) do if cfg[k] ~= nil then o.Set(cfg[k]) end end
 		rainbow = cfg.rainbow == true
@@ -1463,26 +1463,26 @@ button(cr, "Загрузить конфиг", function()
 	else
 		toast("Конфиг не найден", C.bad)
 	end
-end, false, half)
+end, false, __AuraFix_half)
 
-local ps = page("Настройки")
-section(ps, "ЦВЕТ АКЦЕНТА")
-local swc = card(ps, 46)
+__AuraFix_ps = page("Настройки")
+section(__AuraFix_ps, "ЦВЕТ АКЦЕНТА")
+__AuraFix_swc = card(__AuraFix_ps, 46)
 new("UIListLayout", {FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center,
-	VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 10)}, swc)
+	VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 10)}, __AuraFix_swc)
 for k, col in ipairs(cols) do
-	local b = new("TextButton", {Text = "", AutoButtonColor = false, BackgroundColor3 = col, Size = UDim2.fromOffset(26, 26)}, swc)
+	local b = new("TextButton", {Text = "", AutoButtonColor = false, BackgroundColor3 = col, Size = UDim2.fromOffset(26, 26)}, __AuraFix_swc)
 	round(b, 13); press(b, true)
 	swb[k] = {S = stroke(b, 2, WHITE, 1)}
 	cn(b.Activated, function() rainbow = false; cfg.rainbow = false; setAccent(col, k); toast("Акцент изменён") end)
 end
-local rb = new("TextButton", {Text = "", AutoButtonColor = false, BackgroundColor3 = WHITE, Size = UDim2.fromOffset(26, 26)}, swc)
-round(rb, 13); press(rb, true)
+__AuraFix_rb = new("TextButton", {Text = "", AutoButtonColor = false, BackgroundColor3 = WHITE, Size = UDim2.fromOffset(26, 26)}, __AuraFix_swc)
+round(__AuraFix_rb, 13); press(__AuraFix_rb, true)
 new("UIGradient", {Rotation = 45, Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 80)),
 	ColorSequenceKeypoint.new(.33, Color3.fromRGB(80, 255, 120)), ColorSequenceKeypoint.new(.66, Color3.fromRGB(80, 140, 255)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 80, 200))})}, rb)
-swb[7] = {S = stroke(rb, 2, WHITE, 1)}
-cn(rb.Activated, function()
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 80, 200))})}, __AuraFix_rb)
+swb[7] = {S = stroke(__AuraFix_rb, 2, WHITE, 1)}
+cn(__AuraFix_rb.Activated, function()
 	rainbow = not rainbow
 	cfg.rainbow = rainbow
 	if rainbow then mark(7) else mark(0) end
@@ -1495,32 +1495,32 @@ do
 	end
 	mark(rainbow and 7 or sel)
 end
-slider(ps, "Оттенок", 0, 360, (accent:ToHSV()) * 360, function(v) return string.format("%.0f°", v) end, function(v)
+slider(__AuraFix_ps, "Оттенок", 0, 360, (accent:ToHSV()) * 360, function(v) return string.format("%.0f°", v) end, function(v)
 	rainbow = false; cfg.rainbow = false
 	setAccent(Color3.fromHSV(v / 360, .65, 1), 0, true)
 end, 1)
-section(ps, "ОКНО")
-slider(ps, "Прозрачность", 0, 50, 0, function(v) return string.format("%.0f%%", v) end, function(v)
+section(__AuraFix_ps, "ОКНО")
+slider(__AuraFix_ps, "Прозрачность", 0, 50, 0, function(v) return string.format("%.0f%%", v) end, function(v)
 	baseGT = v / 100
 	if opened then tw(main, {GroupTransparency = baseGT}, .2) end
 end, 1, "gt")
-slider(ps, "Размер меню", 60, 130, baseScale * 100, function(v) return string.format("%.0f%%", v) end, function(v)
+slider(__AuraFix_ps, "Размер меню", 60, 130, baseScale * 100, function(v) return string.format("%.0f%%", v) end, function(v)
 	baseScale = v / 100
 	tw(mscale, {Scale = baseScale}, .25)
 end, 5, "size")
-toggle(ps, "Размытие фона", true, function(v)
+toggle(__AuraFix_ps, "Размытие фона", true, function(v)
 	blurOn = v
 	if opened then tw(blur, {Size = v and 14 or 0}, .3) end
 end, "blur")
-section(ps, "ПОВЕДЕНИЕ")
-toggle(ps, "Авто-скрытие после выбора", false, function(v) cfg.autoHide = v end, "autoHide")
-toggle(ps, "Показывать подсказки", true, function(v) cfg.hints = v end, "hints")
-slider(ps, "Скорость анимаций", 50, 150, 100, function(v) return string.format("%d%%", v) end, function(v)
+section(__AuraFix_ps, "ПОВЕДЕНИЕ")
+toggle(__AuraFix_ps, "Авто-скрытие после выбора", false, function(v) cfg.autoHide = v end, "autoHide")
+toggle(__AuraFix_ps, "Показывать подсказки", true, function(v) cfg.hints = v end, "hints")
+slider(__AuraFix_ps, "Скорость анимаций", 50, 150, 100, function(v) return string.format("%d%%", v) end, function(v)
 	cfg.animSpeedFactor = v / 100
 end, 5, "animSpeed")
-local settingsQuick = row(ps, 32)
-button(settingsQuick, "Сбросить позицию", function() tw(holder, {Position = startPos}, .6, EASE.Back) end, false, UDim2.new(.5, -3, 1, 0))
-button(settingsQuick, "Сбросить конфиг", function()
+__AuraFix_settingsQuick = row(__AuraFix_ps, 32)
+button(__AuraFix_settingsQuick, "Сбросить позицию", function() tw(holder, {Position = startPos}, .6, EASE.Back) end, false, UDim2.new(.5, -3, 1, 0))
+button(__AuraFix_settingsQuick, "Сбросить конфиг", function()
 	cfg = {}
 	rainbow = false
 	for _, control in pairs(ctl) do
@@ -1531,23 +1531,23 @@ button(settingsQuick, "Сбросить конфиг", function()
 	pcall(saveCfg)
 	toast("Всё сброшено", C.warn)
 end, false, UDim2.new(.5, -3, 1, 0))
-section(ps, "ИНФОРМАЦИЯ О ПЛЕЕРЕ")
-local aboutCard = card(ps, 56)
-local aboutOrb = new("Frame", {Position = UDim2.fromOffset(10, 10), Size = UDim2.fromOffset(36, 36), BackgroundColor3 = accent}, aboutCard)
-round(aboutOrb, 18)
-new("UIGradient", {Rotation = 45, Color = ColorSequence.new(light(accent), dark(accent))}, aboutOrb)
-lbl(aboutOrb, "A", 18, WHITE, {TextXAlignment = Enum.TextXAlignment.Center, Font = Enum.Font.GothamBlack})
-lbl(aboutCard, lp.DisplayName, 12, C.text, {Position = UDim2.fromOffset(56, 8), Size = UDim2.new(1, -66, 0, 18), Font = Enum.Font.GothamBold})
-lbl(aboutCard, "@" .. lp.Name .. " · " .. tostring(lp.UserId), 10, C.sub, {Position = UDim2.fromOffset(56, 27), Size = UDim2.new(1, -66, 0, 16)})
-button(ps, "Выгрузить меню", function() setOpen(false); task.delay(.4, unload) end)
+section(__AuraFix_ps, "ИНФОРМАЦИЯ О ПЛЕЕРЕ")
+__AuraFix_aboutCard = card(__AuraFix_ps, 56)
+__AuraFix_aboutOrb = new("Frame", {Position = UDim2.fromOffset(10, 10), Size = UDim2.fromOffset(36, 36), BackgroundColor3 = accent}, __AuraFix_aboutCard)
+round(__AuraFix_aboutOrb, 18)
+new("UIGradient", {Rotation = 45, Color = ColorSequence.new(light(accent), dark(accent))}, __AuraFix_aboutOrb)
+lbl(__AuraFix_aboutOrb, "A", 18, WHITE, {TextXAlignment = Enum.TextXAlignment.Center, Font = Enum.Font.GothamBlack})
+lbl(__AuraFix_aboutCard, lp.DisplayName, 12, C.text, {Position = UDim2.fromOffset(56, 8), Size = UDim2.new(1, -66, 0, 18), Font = Enum.Font.GothamBold})
+lbl(__AuraFix_aboutCard, "@" .. lp.Name .. " · " .. tostring(lp.UserId), 10, C.sub, {Position = UDim2.fromOffset(56, 27), Size = UDim2.new(1, -66, 0, 16)})
+button(__AuraFix_ps, "Выгрузить меню", function() setOpen(false); task.delay(.4, unload) end)
 
-local tabBtns, cur, tok = {}, nil, nil
-local ind = new("Frame", {Size = UDim2.new(1, 0, 0, 32), BackgroundTransparency = .8}, side)
-round(ind, 8); acc(ind, "BackgroundColor3")
-local ibar = new("Frame", {Size = UDim2.new(0, 3, .6, 0), AnchorPoint = Vector2.new(0, .5), Position = UDim2.new(0, 4, .5, 0)}, ind)
-round(ibar, 2); acc(ibar, "BackgroundColor3")
+__AuraFix_tabBtns, __AuraFix_cur, __AuraFix_tok = {}, nil, nil
+__AuraFix_ind = new("Frame", {Size = UDim2.new(1, 0, 0, 32), BackgroundTransparency = .8}, side)
+round(__AuraFix_ind, 8); acc(__AuraFix_ind, "BackgroundColor3")
+__AuraFix_ibar = new("Frame", {Size = UDim2.new(0, 3, .6, 0), AnchorPoint = Vector2.new(0, .5), Position = UDim2.new(0, 4, .5, 0)}, __AuraFix_ind)
+round(__AuraFix_ibar, 2); acc(__AuraFix_ibar, "BackgroundColor3")
 
-local function popIn(name)
+function __AuraFix_popIn(name)
 	local n = 0
 	for _, c in ipairs(pages[name]:GetChildren()) do
 		if c:IsA("GuiObject") and c.Visible then
@@ -1560,44 +1560,44 @@ local function popIn(name)
 	end
 end
 
-local function selectTab(name, instant)
-	if cur == name then return end
-	cur = name
+function __AuraFix_selectTab(name, instant)
+	if __AuraFix_cur == name then return end
+	__AuraFix_cur = name
 	local my = {}
-	tok = my
-	for n, b in pairs(tabBtns) do tw(b, {TextColor3 = n == name and C.text or C.sub}, .25) end
-	tw(ind, {Position = UDim2.fromOffset(0, (table.find(order, name) - 1) * 36)}, .4, EASE.Back)
+	__AuraFix_tok = my
+	for n, b in pairs(__AuraFix_tabBtns) do tw(b, {TextColor3 = n == name and C.text or C.sub}, .25) end
+	tw(__AuraFix_ind, {Position = UDim2.fromOffset(0, (table.find(order, name) - 1) * 36)}, .4, EASE.Back)
 	local function swap() for n, p in pairs(pages) do p.Visible = n == name end end
-	if instant then swap(); popIn(name) return end
+	if instant then swap(); __AuraFix_popIn(name) return end
 	task.spawn(function()
 		tw(content, {GroupTransparency = 1, Position = CPOS + UDim2.fromOffset(0, 10)}, .12).Completed:Wait()
-		if tok ~= my then return end
+		if __AuraFix_tok ~= my then return end
 		swap()
-		content.Position = CPOS - UDim2.fromOffset(0, 10); popIn(name)
+		content.Position = CPOS - UDim2.fromOffset(0, 10); __AuraFix_popIn(name)
 		tw(content, {GroupTransparency = 0, Position = CPOS}, .3)
 	end)
 end
 
-local tabGlyphs = { ["Музыка"] = "♫", ["Эффекты"] = "✦", ["Визуал"] = "◈", ["Разное"] = "◌", ["Настройки"] = "⚙" }
+__AuraFix_tabGlyphs = { ["Музыка"] = "♫", ["Эффекты"] = "✦", ["Визуал"] = "◈", ["Разное"] = "◌", ["Настройки"] = "⚙" }
 for i, name in ipairs(order) do
 	local b = new("TextButton", {Font = Enum.Font.GothamBold, TextSize = 12, TextColor3 = C.sub, TextXAlignment = Enum.TextXAlignment.Left,
 		BackgroundTransparency = 1, AutoButtonColor = false, Position = UDim2.fromOffset(0, (i - 1) * 36), Size = UDim2.new(1, 0, 0, 32)}, side)
 	bind(b, name)
 	new("UIPadding", {PaddingLeft = UDim.new(0, 31)}, b)
 	local glyph = new("TextLabel", {BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 16, TextColor3 = C.sub,
-		Text = tabGlyphs[name] or "•", Position = UDim2.fromOffset(8, 0), Size = UDim2.fromOffset(18, 32), TextXAlignment = Enum.TextXAlignment.Center}, side)
-	acc(glyph, "TextColor3", function() return cur == name and accent or C.sub end)
-	tabBtns[name] = b
-	cn(b.Activated, function() selectTab(name) end)
+		Text = __AuraFix_tabGlyphs[name] or "•", Position = UDim2.fromOffset(8, 0), Size = UDim2.fromOffset(18, 32), TextXAlignment = Enum.TextXAlignment.Center}, side)
+	acc(glyph, "TextColor3", function() return __AuraFix_cur == name and accent or C.sub end)
+	__AuraFix_tabBtns[name] = b
+	cn(b.Activated, function() __AuraFix_selectTab(name) end)
 	cn(b.MouseEnter, function()
-		if cur ~= name then
+		if __AuraFix_cur ~= name then
 			tw(b, {TextColor3 = C.text:Lerp(C.sub, .45)}, .2)
 			tw(glyph, {TextColor3 = accent}, .2)
 		end
 	end)
 	cn(b.MouseLeave, function()
-		tw(b, {TextColor3 = cur == name and C.text or C.sub}, .25)
-		tw(glyph, {TextColor3 = cur == name and accent or C.sub}, .25)
+		tw(b, {TextColor3 = __AuraFix_cur == name and C.text or C.sub}, .25)
+		tw(glyph, {TextColor3 = __AuraFix_cur == name and accent or C.sub}, .25)
 	end)
 end
 
@@ -1608,7 +1608,7 @@ cn(sound.Ended, function()
 		task.delay(.15, function()
 			if not sound.IsPlaying and #queueItems > 0 and gui.Parent then
 				local nextItem = table.remove(queueItems, 1)
-				renderQueue()
+				__AuraFix_renderQueue()
 				box.Text = nextItem.id
 				play(nextItem.id)
 			end
@@ -1619,7 +1619,7 @@ cn(UIS.InputBegan, function(i, gp)
 	if not gp and i.KeyCode == Enum.KeyCode.RightShift then setOpen(not opened) end
 end)
 
-local spinV = 0
+__AuraFix_spinV = 0
 RS:BindToRenderStep("AuraMenuLoop", Enum.RenderPriority.Camera.Value + 1, function(dt)
 	local t = os.clock()
 	if rainbow then
@@ -1652,7 +1652,7 @@ RS:BindToRenderStep("AuraMenuLoop", Enum.RenderPriority.Camera.Value + 1, functi
 		m.f.Size = UDim2.fromOffset(4, math.floor(m.h + .5))
 	end
 	if not pages["Музыка"].Visible then return end
-	for n, b in ipairs(bars) do
+	for n, b in ipairs(__AuraFix_bars) do
 		local wave = math.abs(math.sin(t * 5 + n * .8) * math.cos(t * 2.3 + n * .37))
 		local target = playing and loud * (.35 + .65 * wave) or 0
 		if visualizerStyle == 2 then target = playing and loud * (.25 + .75 * math.abs(math.sin(t * 6 + n * 1.25))) or 0 end
@@ -1663,9 +1663,9 @@ RS:BindToRenderStep("AuraMenuLoop", Enum.RenderPriority.Camera.Value + 1, functi
 		b.f.Size = UDim2.new(1 / 28, -3, 0, 3 + b.h * 36)
 		b.c.Position = UDim2.new((n - 1) / 28, 2, 1, -11 - b.p * 36)
 	end
-	spinV += ((playing and 150 or 0) - spinV) * math.min(1, dt * 3)
-	vinyl.Rotation = (vinyl.Rotation + spinV * dt) % 360
-	vs.Thickness = musicAccentPulse and (2 + loud * 3) or 2
+	__AuraFix_spinV += ((playing and 150 or 0) - __AuraFix_spinV) * math.min(1, dt * 3)
+	__AuraFix_vinyl.Rotation = (__AuraFix_vinyl.Rotation + __AuraFix_spinV * dt) % 360
+	__AuraFix_vs.Thickness = musicAccentPulse and (2 + loud * 3) or 2
 	local len = sound.TimeLength
 	if not prog.Dragging then prog.Set(len > 0 and sound.TimePosition / len or 0, true, true) end
 	local want = T(playing and "Пауза" or "Играть")
@@ -1677,6 +1677,6 @@ RS:BindToRenderStep("AuraMenuLoop", Enum.RenderPriority.Camera.Value + 1, functi
 	end
 end)
 
-selectTab(order[1], true)
+__AuraFix_selectTab(order[1], true)
 setOpen(true)
 task.delay(.9, function() toast("AURA загружено") end)
