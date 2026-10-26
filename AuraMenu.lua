@@ -17,7 +17,7 @@ local genv = (getgenv and getgenv()) or _G
 if genv.AuraUnload then pcall(genv.AuraUnload) end
 if pgui:FindFirstChild("AuraMenu") then pgui.AuraMenu:Destroy() end
 if SoundService:FindFirstChild("AuraSound") then SoundService.AuraSound:Destroy() end
-for _, v in ipairs(Lighting:GetChildren()) do if v.Name == "AuraBlur" then v:Destroy() end end
+for _, v in ipairs(Lighting:GetChildren()) do if v.Name == "AuraBlur" or v.Name == "AuraEnvBloom" or v.Name == "AuraEnvColor" or v.Name == "AuraEnvRays" then v:Destroy() end end
 
 local WIN_W, WIN_H, TOP, SB = 420, 270, 36, 96
 local EASE, DIR = Enum.EasingStyle, Enum.EasingDirection
@@ -75,6 +75,8 @@ local EN = {
 	["Авто-скрытие после выбора"] = "Auto-hide after starting playback", ["Скорость анимаций"] = "Animation speed",
 	["Сбросить конфиг"] = "Reset settings", ["Всё включить"] = "Enable all", ["Всё скрыть"] = "Hide all",
 	["Уже в очереди"] = "Already queued", ["Список очищен"] = "List cleared",
+	["ОКРУЖЕНИЕ"] = "ENVIRONMENT", ["Мягкое свечение"] = "Soft bloom", ["Сила свечения"] = "Bloom strength",
+	["Цветовой стиль"] = "Color style", ["Солнечные лучи"] = "Sun rays", ["Кино"] = "Cinematic", ["Яркий"] = "Vivid",
 	["Микшер"] = "Mixer", ["Быстрые настройки"] = "Quick controls", ["Тихо"] = "Quiet",
 	["Обычный"] = "Normal", ["Громко"] = "Loud", ["Максимум"] = "Maximum",
 	["Список результатов"] = "Search results", ["Поиск аудио Roblox"] = "Roblox audio search",
@@ -106,14 +108,32 @@ local function cn(sig, fn)
 	return c
 end
 
-local function tw(o, p, t, st, dr)
+function __AuraFix_tw(o, p, t, st, dr)
 	local speed = tonumber(cfg.animSpeedFactor) or 1
 	speed = math.clamp(speed, .5, 1.5)
-	local duration = math.max(.01, (t or .2) / speed)
+	local duration = math.max(.015, (t or .2) / speed)
+	__AuraFix_activeTweens = __AuraFix_activeTweens or setmetatable({}, {__mode = "k"})
+	local records = __AuraFix_activeTweens[o]
+	if not records then records = {}; __AuraFix_activeTweens[o] = records end
+	for i = #records, 1, -1 do
+		local rec, overlap = records[i], false
+		for property in pairs(p) do if rec.props[property] then overlap = true; break end end
+		if overlap then table.remove(records, i); pcall(function() rec.tween:Cancel() end) end
+	end
 	local tween = TS:Create(o, TweenInfo.new(duration, st or EASE.Quint, dr or DIR.Out), p)
+	local record = {tween = tween, props = p}
+	records[#records + 1] = record
+	tween.Completed:Connect(function()
+		local current = __AuraFix_activeTweens and __AuraFix_activeTweens[o]
+		if current then
+			for i = #current, 1, -1 do if current[i] == record then table.remove(current, i) end end
+			if #current == 0 then __AuraFix_activeTweens[o] = nil end
+		end
+	end)
 	tween:Play()
 	return tween
 end
+local tw = __AuraFix_tw
 
 local lo = 0
 local function new(class, props, parent)
@@ -174,11 +194,17 @@ local function press(b, flat)
 	local cr = b:FindFirstChildOfClass("UICorner")
 	local ov = new("Frame", {BackgroundColor3 = WHITE, BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 4}, b)
 	if cr then new("UICorner", {CornerRadius = cr.CornerRadius}, ov) end
-	cn(b.MouseEnter, function() tw(ov, {BackgroundTransparency = .9}, .2) end)
-	cn(b.MouseLeave, function() tw(ov, {BackgroundTransparency = 1}, .3) end)
+	cn(b.MouseEnter, function()
+		tw(ov, {BackgroundTransparency = .88}, .18, EASE.Sine)
+		if not flat then tw(s, {Scale = 1.025}, .18, EASE.Quad) end
+	end)
+	cn(b.MouseLeave, function()
+		tw(ov, {BackgroundTransparency = 1}, .24, EASE.Sine)
+		if not flat then tw(s, {Scale = 1}, .2, EASE.Quad) end
+	end)
 	cn(b.InputBegan, function(i)
 		if not isPress(i) then return end
-		tw(s, {Scale = .93}, .1)
+		tw(s, {Scale = .94}, .09, EASE.Quad)
 		local sz = b.AbsoluteSize
 		if flat or sz.X < 1 then return end
 		local k = math.max(sz.X, sz.Y) * 2.2
@@ -188,7 +214,7 @@ local function press(b, flat)
 		round(rp, 200)
 		tw(rp, {Size = UDim2.fromOffset(k, k), BackgroundTransparency = 1}, .55).Completed:Connect(function() rp:Destroy() end)
 	end)
-	cn(b.InputEnded, function(i) if isPress(i) then tw(s, {Scale = 1}, .3, EASE.Back) end end)
+	cn(b.InputEnded, function(i) if isPress(i) then tw(s, {Scale = 1}, .24, EASE.Back) end end)
 end
 
 local CFG_FILE = "AuraMenu.json"
@@ -679,13 +705,13 @@ local V = {
 	teamCheck = false,
 	healthText = false,
 	lineWidth = 1.5,
-	labelSize = 13,
+	skelWidth = 1.5,	labelSize = 13,
 	brightness = 1,
 }
 local esp = {}
 local espAny, espWas = true, false
 local function refresh()
-	espAny = V.hl or V.skel or V.names or V.dist or V.box or V.health or V.tracers
+	espAny = V.hl or V.skel or V.names or V.dist or V.box or V.health or V.tracers or V.healthText
 end
 
 local function mkLine()
@@ -822,52 +848,52 @@ local function updateBoxESP(e, char, hum, hrp, cam, vs, distance)
 end
 
 local function buildBones(e, char)
-	local motors = {}
+	local joints = {}
 	for _, d in ipairs(char:GetDescendants()) do
-		if d:IsA("Motor6D") and d.Part0 and d.Part1 then motors[#motors + 1] = d end
-	end
-	local bones = {}
-	for _, m in ipairs(motors) do
-		local kids = false
-		for _, n in ipairs(motors) do
-			if n.Part0 == m.Part1 then kids = true; bones[#bones + 1] = {m, n} end
+		if (d:IsA("Motor6D") or d:IsA("AnimationConstraint")) then
+			local ok, valid = pcall(function()
+				if d:IsA("Motor6D") then return d.Part0 ~= nil and d.Part1 ~= nil end
+				return d.Attachment0 ~= nil and d.Attachment1 ~= nil
+			end)
+			if ok and valid then joints[#joints + 1] = d end
 		end
-		if not kids then bones[#bones + 1] = {m} end
 	end
-	e.bones = bones
-	while #e.lines < #bones do e.lines[#e.lines + 1] = mkLine() end
+	e.bones = joints
+	while #e.lines < #joints do e.lines[#e.lines + 1] = mkLine() end
 end
 
 local function drawSkel(e, cam, vs)
 	e.lv = true
-	for k, l in ipairs(e.lines) do
-		local bn = e.bones[k]
-		local ok = false
-		if bn then
-			local m, n = bn[1], bn[2]
-			local p0, p1 = m.Part0, m.Part1
-			if p0 and p1 then
-				local a = (p0.CFrame * m.C0).Position
-				local b
-				if n and n.Part0 then
-					b = (n.Part0.CFrame * n.C0).Position
-				else
-					local c = p1.Position
-					b = p1.Name == "Head" and c or c * 2 - a
+	for k, line in ipairs(e.lines) do
+		local joint = e.bones[k]
+		local visible = false
+		if joint and joint.Parent then
+			local ok, a, b = pcall(function()
+				if joint:IsA("Motor6D") then
+					if not joint.Part0 or not joint.Part1 then return nil, nil end
+					return (joint.Part0.CFrame * joint.C0).Position, (joint.Part1.CFrame * joint.C1).Position
 				end
+				if not joint.Attachment0 or not joint.Attachment1 then return nil, nil end
+				return joint.Attachment0.WorldPosition, joint.Attachment1.WorldPosition
+			end)
+			if ok and a and b then
 				local pa = cam:WorldToViewportPoint(a)
 				local pb = cam:WorldToViewportPoint(b)
 				if pa.Z > 0 and pb.Z > 0 then
 					local dx, dy = pb.X - pa.X, pb.Y - pa.Y
-					l.Position = UDim2.fromScale((pa.X + pb.X) / 2 / vs.X, (pa.Y + pb.Y) / 2 / vs.Y)
-					l.Size = UDim2.fromOffset(math.sqrt(dx * dx + dy * dy), 2)
-					l.Rotation = math.deg(math.atan2(dy, dx))
-					l.BackgroundColor3 = accent
-					ok = true
+					local len = math.sqrt(dx * dx + dy * dy)
+					if len > .5 and len < math.max(vs.X, vs.Y) * 1.5 then
+						line.Position = UDim2.fromOffset((pa.X + pb.X) / 2, (pa.Y + pb.Y) / 2)
+						line.Size = UDim2.fromOffset(len, math.clamp(V.skelWidth or 1.5, 1, 4))
+						line.Rotation = math.deg(math.atan2(dy, dx))
+						line.BackgroundColor3 = accent:Lerp(WHITE, (1 - math.clamp(V.brightness, .25, 1)) * .15)
+						line.BackgroundTransparency = 0
+						visible = true
+					end
 				end
 			end
 		end
-		l.Visible = ok
+		line.Visible = visible
 	end
 end
 
@@ -923,7 +949,7 @@ local function updateESP(t)
 			e.tracer.Visible = false
 		end
 		local sk = V.skel and alive
-		if sk and (e.bchar ~= char or t - e.bt > (#e.bones < 8 and .5 or 3)) then
+		if sk and (e.bchar ~= char or t - e.bt > (#e.bones == 0 and .35 or 2)) then
 			e.bchar, e.bt = char, t
 			buildBones(e, char)
 		end
@@ -1037,9 +1063,10 @@ local fpsA, fpsN = 0, 0
 
 local function unload()
 	pcall(function() RS:UnbindFromRenderStep("AuraMenuLoop") end)
+	if __AuraFix_activeTweens then for _, records in pairs(__AuraFix_activeTweens) do for _, record in ipairs(records) do pcall(function() record.tween:Cancel() end) end end; table.clear(__AuraFix_activeTweens) end
 	for _, c in ipairs(conns) do pcall(function() c:Disconnect() end) end
 	for plr in pairs(esp) do detach(plr) end
-	for _, object in ipairs({blur, sound, gui}) do
+	for _, object in ipairs({blur, sound, gui, __AuraFix_envBloom, __AuraFix_envColor, __AuraFix_envRays}) do
 		if object and object.Parent then pcall(function() object:Destroy() end) end
 	end
 	genv.AuraUnload = nil
@@ -1407,6 +1434,28 @@ section(__AuraFix_pe, "ПРОСТРАНСТВО")
 reverbT = toggle(__AuraFix_pe, "Реверберация", false, function(v) reverb.Enabled = v end, "reverb")
 echoT = toggle(__AuraFix_pe, "Эхо", false, function(v) echo.Enabled = v end, "echo")
 
+__AuraFix_envBloom = Instance.new("BloomEffect")
+__AuraFix_envBloom.Name = "AuraEnvBloom"
+__AuraFix_envBloom.Enabled = false
+__AuraFix_envBloom.Intensity = 0.35
+__AuraFix_envBloom.Size = 24
+__AuraFix_envBloom.Threshold = 1.1
+__AuraFix_envBloom.Parent = Lighting
+__AuraFix_envColor = Instance.new("ColorCorrectionEffect")
+__AuraFix_envColor.Name = "AuraEnvColor"
+__AuraFix_envColor.Enabled = false
+__AuraFix_envColor.Brightness = 0
+__AuraFix_envColor.Contrast = 0.08
+__AuraFix_envColor.Saturation = 0.12
+__AuraFix_envColor.TintColor = Color3.fromRGB(225, 232, 255)
+__AuraFix_envColor.Parent = Lighting
+__AuraFix_envRays = Instance.new("SunRaysEffect")
+__AuraFix_envRays.Name = "AuraEnvRays"
+__AuraFix_envRays.Enabled = false
+__AuraFix_envRays.Intensity = 0.04
+__AuraFix_envRays.Spread = 0.75
+__AuraFix_envRays.Parent = Lighting
+
 __AuraFix_pv = page("Визуал")
 section(__AuraFix_pv, "ОТОБРАЖЕНИЕ")
 toggle(__AuraFix_pv, "Подсветка игроков", true, function(v) V.hl = v; refresh() end, "hl")
@@ -1424,9 +1473,38 @@ section(__AuraFix_pv, "ЦВЕТ И ПЛАВНОСТЬ")
 slider(__AuraFix_pv, "Яркость ESP", 25, 100, 100, function(v) return string.format("%d%%", v) end, function(v) V.brightness = v / 100 end, 5, "espBrightness")
 slider(__AuraFix_pv, "Размер подписей", 10, 18, 13, function(v) return string.format("%d px", v) end, function(v) V.labelSize = v end, 1, "labelSize")
 slider(__AuraFix_pv, "Толщина рамки", 1, 4, 1.5, function(v) return string.format("%.1f px", v) end, function(v) V.lineWidth = v end, .5, "lineWidth")
+slider(__AuraFix_pv, "Толщина скелета", 1, 4, 1.5, function(v) return string.format("%.1f px", v) end, function(v) V.skelWidth = v end, .5, "skelWidth")
+section(__AuraFix_pv, "ОКРУЖЕНИЕ")
+toggle(__AuraFix_pv, "Мягкое свечение", false, function(v)
+	__AuraFix_envBloom.Enabled = v
+end, "envBloom")
+slider(__AuraFix_pv, "Сила свечения", 0, 100, 35, function(v) return string.format("%d%%", v) end, function(v)
+	__AuraFix_envBloom.Intensity = v / 100
+	__AuraFix_envBloom.Enabled = (ctl.envBloom and cfg.envBloom == true) or false
+end, 5, "envBloomStrength")
+segment(__AuraFix_pv, "Цветовой стиль", {"Обычный", "Кино", "Яркий"}, function(i)
+	if i == 1 then
+		__AuraFix_envColor.Enabled = false
+	elseif i == 2 then
+		__AuraFix_envColor.TintColor = Color3.fromRGB(218, 228, 255)
+		__AuraFix_envColor.Brightness = -0.015
+		__AuraFix_envColor.Contrast = 0.16
+		__AuraFix_envColor.Saturation = -0.08
+		__AuraFix_envColor.Enabled = true
+	else
+		__AuraFix_envColor.TintColor = Color3.fromRGB(255, 240, 220)
+		__AuraFix_envColor.Brightness = 0.025
+		__AuraFix_envColor.Contrast = 0.08
+		__AuraFix_envColor.Saturation = 0.22
+		__AuraFix_envColor.Enabled = true
+	end
+end, 1, "envColorStyle")
+toggle(__AuraFix_pv, "Солнечные лучи", false, function(v)
+	__AuraFix_envRays.Enabled = v
+end, "envRays")
 __AuraFix_espActions = row(__AuraFix_pv, 32)
 button(__AuraFix_espActions, "Всё включить", function()
-	for _, key in ipairs({"hl", "box", "health", "names", "dist"}) do
+	for _, key in ipairs({"hl", "box", "health", "tracers", "skel", "names", "dist", "healthText"}) do
 		if ctl[key] then ctl[key].Set(true) end
 	end
 	refresh()
@@ -1555,7 +1633,7 @@ function __AuraFix_popIn(name)
 			if n > 9 then break end
 			local sc = c:FindFirstChild("Pop") or new("UIScale", {Name = "Pop"}, c)
 			sc.Scale = .85
-			task.delay(n * .04, function() tw(sc, {Scale = 1}, .5, EASE.Back) end)
+			task.delay(n * .035, function() if c.Parent and pages[name].Visible then tw(sc, {Scale = 1}, .42, EASE.Back) end end)
 		end
 	end
 end
@@ -1570,11 +1648,11 @@ function __AuraFix_selectTab(name, instant)
 	local function swap() for n, p in pairs(pages) do p.Visible = n == name end end
 	if instant then swap(); __AuraFix_popIn(name) return end
 	task.spawn(function()
-		tw(content, {GroupTransparency = 1, Position = CPOS + UDim2.fromOffset(0, 10)}, .12).Completed:Wait()
+		tw(content, {GroupTransparency = 1, Position = CPOS + UDim2.fromOffset(0, 8)}, .14).Completed:Wait()
 		if __AuraFix_tok ~= my then return end
 		swap()
-		content.Position = CPOS - UDim2.fromOffset(0, 10); __AuraFix_popIn(name)
-		tw(content, {GroupTransparency = 0, Position = CPOS}, .3)
+		content.Position = CPOS - UDim2.fromOffset(0, 8); __AuraFix_popIn(name)
+		tw(content, {GroupTransparency = 0, Position = CPOS}, .34, EASE.Quint)
 	end)
 end
 
